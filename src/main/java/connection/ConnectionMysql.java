@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 
 public class ConnectionMysql {
 	
+	//dados apenas para teste
 	static String serverName = "localhost";
 	static String mydatabase = "mysql";
 	static String url = "jdbc:mysql://" + serverName + ":3306/" + mydatabase;
@@ -36,8 +37,7 @@ public class ConnectionMysql {
 			return connection;
 			
 		} catch (Exception e) {
-			e.printStackTrace();
-			//System.out.println("Could not connect to the Database.");
+			System.out.println("Could not connect to the Database.");
             return null;
 		}
 		
