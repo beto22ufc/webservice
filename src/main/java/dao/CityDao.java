@@ -1,46 +1,43 @@
 package dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import connection.ConnectionMysql;
 import models.City;
 
 public class CityDao {
-	private Connection connectionMysql;
+	
+	private final static Logger LOGGER = Logger.getLogger(CityDao.class.getName());
 
 	public CityDao() {
-        this.connectionMysql = new ConnectionMysql().getConectionMysql();
+		
     }
 	
 	public void insert (City city) {
-		String sql = "insert into city (name, latitude, longitude) values (?,?,?)";
-		
+		String sql = "INSERT INTO city (name, latitude, longitude) VALUES (?,?,?)";		
 		try {
-            PreparedStatement stmt = connectionMysql.prepareStatement(sql);
-
+            PreparedStatement stmt = ConnectionMysql.getConectionMysql().prepareStatement(sql);
             stmt.setString(1,city.getName());
             stmt.setFloat(2,city.getLatitude());
             stmt.setFloat(3,city.getLongitude());
-
             stmt.execute();
             stmt.close();
         } catch (SQLException e) {
-           System.out.println("Error accessing the database... ");
+        	LOGGER.log(LOGGER.getLevel(), "Error accessing the database...", e.fillInStackTrace());
         }
 	}
 	
 	public List<City> findAll () {
-		String sql = "select * from city";
+		String sql = "SELECT * FROM city";
 		List<City> cities = new ArrayList<City>();
 		try {
-			PreparedStatement stmt = connectionMysql.prepareStatement(sql);
-			ResultSet rs = stmt.executeQuery();
-			
+			PreparedStatement stmt = ConnectionMysql.getConectionMysql().prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();			
 			while(rs.next()) {
 				City city = new City();
 				city.setId(rs.getInt("id"));
@@ -51,10 +48,9 @@ public class CityDao {
 				cities.add(city);
 			}
 			rs.close();
-            stmt.close();
-			
+            stmt.close();			
 		} catch (SQLException e) {
-           System.out.println("Error accessing the database... ");
+			LOGGER.log(LOGGER.getLevel(), "Error accessing the database...", e.fillInStackTrace());
         }
 		return cities;
 		

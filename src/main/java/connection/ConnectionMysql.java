@@ -2,15 +2,19 @@ package connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.logging.Logger;
 
 public class ConnectionMysql {
 	
-	//dados apenas para teste
+	private final static Logger LOGGER = Logger.getLogger(ConnectionMysql.class.getName());
+	
 	static String serverName = "localhost";
-	static String mydatabase = "mysql";
-	static String url = "jdbc:mysql://" + serverName + ":3306/" + mydatabase;
+	static String mydatabase = "cities";
+	static String url = "jdbc:mysql://" + serverName + ":3306/" + mydatabase+"?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 	static String username = "root";
-	static String password = "database1234";
+	static String password = "";
+	
+	private static Connection connection = null;
 	
 
 	public ConnectionMysql() {
@@ -19,28 +23,21 @@ public class ConnectionMysql {
 	public static String status = "Not connected";
 	
 	public static Connection getConectionMysql() {
-		Connection connection = null;
-		
+		if (connection == null) {
+			connection = connect();
+		}
+		return connection;		
+	}
+	
+	private static Connection connect() {
 		String driverName = "com.mysql.jdbc.Driver";
-		
 		try {
-			Class.forName(driverName);
-		
-			connection = DriverManager.getConnection(url, username, password);
-			
-			if (connection != null) {
-				status = ("STATUS--->Successfully connected!");
-			} else {
-				status = ("STATUS--->Could not connect.");
-			}
-			System.out.println(status);
-			return connection;
-			
+			Class.forName(driverName);		
+			return DriverManager.getConnection(url, username, password);
 		} catch (Exception e) {
-			System.out.println("Could not connect to the Database.");
+			LOGGER.log(LOGGER.getLevel(), "Não foi possível realizar a conexão!", e.fillInStackTrace());
             return null;
 		}
-		
 	}
 	
 	public static String statusConnection() {
