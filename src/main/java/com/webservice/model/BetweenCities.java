@@ -1,4 +1,4 @@
-package models;
+package com.webservice.model;
 
 public class BetweenCities {
 	private City cityOne;

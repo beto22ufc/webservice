@@ -1,4 +1,4 @@
-package connection;
+package com.webservice.dao.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -4,13 +4,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-import resource.CidadeResource;
+import com.webservice.dao.SetupDao;
+import com.webservice.resource.CityResource;
 
 @SpringBootApplication
-@ComponentScan(basePackageClasses = CidadeResource.class)
+@ComponentScan(basePackages = {"com.webservice"})
 public class WebserviceApplication {
 
 	public static void main(String[] args) {
+		SetupDao setupDao = new SetupDao();
+		setupDao.run();
 		SpringApplication.run(WebserviceApplication.class, args);
 	}
 

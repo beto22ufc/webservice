@@ -1,15 +1,19 @@
-package dao;
+package com.webservice.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import connection.ConnectionMysql;
-import models.City;
+import org.springframework.stereotype.Repository;
 
+import com.webservice.dao.connection.ConnectionMysql;
+import com.webservice.model.City;
+
+@Repository
 public class CityDao {
 	
 	private final static Logger LOGGER = Logger.getLogger(CityDao.class.getName());
@@ -18,17 +22,19 @@ public class CityDao {
 		
     }
 	
-	public void insert (City city) {
+	public City insert (City city) {
 		String sql = "INSERT INTO city (name, latitude, longitude) VALUES (?,?,?)";		
 		try {
-            PreparedStatement stmt = ConnectionMysql.getConectionMysql().prepareStatement(sql);
+            PreparedStatement stmt = ConnectionMysql.getConectionMysql().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);           
             stmt.setString(1,city.getName());
             stmt.setFloat(2,city.getLatitude());
             stmt.setFloat(3,city.getLongitude());
-            stmt.execute();
+            stmt.executeUpdate();
             stmt.close();
+            return city;
         } catch (SQLException e) {
-        	LOGGER.log(LOGGER.getLevel(), "Error accessing the database...", e.fillInStackTrace());
+        	e.printStackTrace();
+        	return null;
         }
 	}
 	
@@ -50,7 +56,7 @@ public class CityDao {
 			rs.close();
             stmt.close();			
 		} catch (SQLException e) {
-			LOGGER.log(LOGGER.getLevel(), "Error accessing the database...", e.fillInStackTrace());
+			e.printStackTrace();
         }
 		return cities;
 		

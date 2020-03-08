@@ -1,0 +1,7 @@
+-- executed=true
+CREATE TABLE IF NOT EXISTS `city` (
+  `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `latitude` float NOT NULL,
+  `longitude` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
